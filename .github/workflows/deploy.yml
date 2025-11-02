@@ -18,10 +18,12 @@ jobs:
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@v4.3.0
       with:
-        server: ${{ secrets.FTP_SERVER }}       # ***SECRETS***
-        username: ${{ secrets.FTP_USERNAME }}   # ***SECRETS***
-        password: ${{ secrets.FTP_PASSWORD }}   # ***SECRETS***
-        server-dir: /htdocs/                   # Check your host's path
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ${{ secrets.FTP_TARGET_FOLDER }}
+        # Set to true to delete files on the server that are deleted from the GitHub repo
+        # delete-remote-files: true             # Check your host's path
         
         # This parameter enables efficient file syncing.
         # It's set by default, so you don't need to change anything!
