@@ -1,26 +1,39 @@
-name: 🚀 Deploy to InfinityFree via FTP
+name: Deploy WordPress via FTP
 
 on:
   push:
     branches:
-      - main # Change to your deployment branch (e.g., master or main)
+      - main # or master
 
 jobs:
-  ftp-deploy:
+  web-deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-
-    - name: 📤 FTP Deploy to InfinityFree
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+    - uses: actions/checkout@v4
       with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ${{ secrets.FTP_TARGET_FOLDER }}
-        # Set to true to delete files on the server that are deleted from the GitHub repo
-        # delete-remote-files: true 
+        fetch-depth: 2
         
-    - name: 🔔 Deployment Complete
-      run: echo "Deployment to InfinityFree finished!"
+    # This is the action for deployment
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+      with:
+        server: ${{ secrets.FTP_SERVER }}       # ***SECRETS***
+        username: ${{ secrets.FTP_USERNAME }}   # ***SECRETS***
+        password: ${{ secrets.FTP_PASSWORD }}   # ***SECRETS***
+        server-dir: /htdocs/                   # Check your host's path
+        
+        # This parameter enables efficient file syncing.
+        # It's set by default, so you don't need to change anything!
+        # The action tracks which files it has already uploaded.
+        # state-name: .ftp-deploy-sync-state.json 
+        
+        # ✅ EXCLUSION LIST: These files/folders will be skipped entirely.
+        exclude: |
+          .git/
+          .github/
+          node_modules/
+          vendor/
+          wp-admin/**
+          wp-includes/**
+          wp-content/plugins/disable-wordpress-updates/**
