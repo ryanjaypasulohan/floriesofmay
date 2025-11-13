@@ -1,0 +1,22 @@
+<?php
+// WARNING: This script is a massive security risk. DELETE IT IMMEDIATELY after use.
+// 1. Rename your zip file to match $file_to_unzip below.
+// 2. Upload the zip file and this script to /htdocs/
+// 3. Navigate to http://YOURDOMAIN.com/unzip.php
+// 4. DELETE this script and the ZIP file IMMEDIATELY after it runs.
+
+$file_to_unzip = 'site_deploy.zip'; 
+$target_dir = '/test/'; // Unzip to the current directory (htdocs)
+
+$zip = new ZipArchive;
+$res = $zip->open($file_to_unzip);
+if ($res === TRUE) {
+  $zip->extractTo($target_dir);
+  $zip->close();
+  echo "✅ Success! '$file_to_unzip' extracted to '$target_dir'.";
+} else {
+  echo "❌ Error! Could not open '$file_to_unzip'. Check if it exists and if the PHP ZipArchive extension is enabled on your host.";
+}
+// Delete the script itself so no one can abuse it
+// unlink('unzip.php');
+?>
